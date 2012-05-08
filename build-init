@@ -1,0 +1,16 @@
+#!/bin/sh
+
+CONFIG_KEY=$1
+
+BUILD_URL=`git config --get ${CONFIG_KEY}.url`
+if [ "x$BUILD_URL" = "x" ]; then
+    echo "Config '${CONFIG_KEY}.url' is required."
+    echo "    git config --add ${CONFIG_KEY}.url http://yourjenkins/job/yourjob"
+    exit 1
+fi
+BUILD_URL="${BUILD_URL}/build?delay=0sec"
+
+BUILD_TOKEN=`git config --get ${CONFIG_KEY}.token`
+if [ "x$BUILD_TOKEN" != "x" ]; then
+    BUILD_URL="${BUILD_URL}&token=${BUILD_TOKEN}"
+fi

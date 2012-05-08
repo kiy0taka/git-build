@@ -1,0 +1,17 @@
+#!/bin/sh
+
+source `dirname $0`/build-init build
+if [ $? -ne 0 ]; then
+    exit
+fi
+
+git push
+
+if [ $? -eq 0 ]; then
+    STATUS=$(curl -s -o /dev/null -w '%{http_code}\n' "$BUILD_URL")
+    if [ '302' = "$STATUS" ]; then
+        echo "Build started."
+    else
+        echo "Error [$STATUS]"
+    fi
+fi
